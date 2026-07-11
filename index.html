@@ -47,11 +47,10 @@
         <button id="refreshButton" class="icon-button" type="button" aria-label="โหลดข้อมูลใหม่" title="โหลดข้อมูลใหม่">↻</button>
       </div>
       <form id="searchForm" class="search-form">
-        <label><span>ITEM</span><input id="itemInput" name="item" autocomplete="off" placeholder="เช่น FG-00001"></label>
-        <label><span>NAME PART</span><input id="nameInput" name="name" autocomplete="off" placeholder="กรอกชื่อ Part"></label>
+        <label><span>ITEM / NAME PART</span><input id="searchInput" name="query" autocomplete="off" placeholder="กรอก ITEM หรือชื่อ Part เช่น FG-00001, MAGNET"></label>
         <button class="search-button" type="submit"><span aria-hidden="true">⌕</span> ค้นหา</button>
       </form>
-      <p class="search-hint">กรอกอย่างน้อย 1 ช่อง ระบบรองรับการค้นหาบางส่วนของคำ</p>
+      <p class="search-hint">ค้นหาได้ทั้ง ITEM และ Name Part พร้อมรองรับการค้นหาบางส่วนของคำ</p>
     </section>
 
     <section id="resultSection" class="result-section" aria-live="polite" hidden>

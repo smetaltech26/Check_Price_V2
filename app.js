@@ -6,7 +6,7 @@
   const $ = (selector) => document.querySelector(selector);
   const elements = {
     status: $("#connectionStatus"), scan: $("#scanButton"), refresh: $("#refreshButton"),
-    form: $("#searchForm"), item: $("#itemInput"), name: $("#nameInput"),
+    form: $("#searchForm"), search: $("#searchInput"),
     results: $("#resultSection"), grid: $("#resultGrid"), count: $("#resultCount"),
     empty: $("#emptyState"), modal: $("#scannerModal"), toast: $("#toast")
   };
@@ -60,10 +60,13 @@
   function showToast(message, isError = false) { elements.toast.textContent = message; elements.toast.className = `toast show${isError ? " error" : ""}`; clearTimeout(showToast.timer); showToast.timer = setTimeout(() => elements.toast.classList.remove("show"), 3200); }
   function price(value) { const number = Number(String(value).replace(/[^0-9.-]/g, "")); return Number.isFinite(number) ? new Intl.NumberFormat("th-TH", { style: "currency", currency: config.currency, minimumFractionDigits: 2 }).format(number) : (value || "—"); }
 
-  function search(itemQuery, nameQuery) {
-    const item = normalize(itemQuery); const name = normalize(nameQuery);
-    if (!item && !name) { showToast("กรุณากรอก ITEM หรือ Name Part", true); return; }
-    const matches = state.rows.filter((row) => (!item || normalize(row[state.headers.item]).includes(item)) && (!name || normalize(row[state.headers.name]).includes(name)));
+  function search(query) {
+    const keyword = normalize(query);
+    if (!keyword) { showToast("กรุณากรอก ITEM หรือ Name Part", true); return; }
+    const matches = state.rows.filter((row) =>
+      normalize(row[state.headers.item]).includes(keyword) ||
+      normalize(row[state.headers.name]).includes(keyword)
+    );
     renderResults(matches);
   }
 
@@ -88,7 +91,7 @@
     try {
       state.scanner = new Html5Qrcode("qrReader");
       await state.scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 }, aspectRatio: 1 }, async (decoded) => {
-        const item = extractItem(decoded); await closeScanner(); elements.item.value = item; elements.name.value = ""; search(item, "");
+        const item = extractItem(decoded); await closeScanner(); elements.search.value = item; search(item);
       }, () => {});
     } catch (error) { console.error(error); await closeScanner(); showToast("เปิดกล้องไม่ได้ กรุณาอนุญาตใช้กล้องหรือลองกรอก ITEM", true); }
   }
@@ -98,7 +101,7 @@
     elements.modal.hidden = true; document.body.classList.remove("modal-open");
   }
 
-  elements.form.addEventListener("submit", (event) => { event.preventDefault(); if (!state.rows.length) { showToast("ฐานข้อมูลยังไม่พร้อม กรุณาโหลดใหม่", true); return; } search(elements.item.value, elements.name.value); });
+  elements.form.addEventListener("submit", (event) => { event.preventDefault(); if (!state.rows.length) { showToast("ฐานข้อมูลยังไม่พร้อม กรุณาโหลดใหม่", true); return; } search(elements.search.value); });
   elements.scan.addEventListener("click", openScanner);
   elements.refresh.addEventListener("click", () => loadData(true));
   document.querySelectorAll("[data-close-scanner]").forEach((element) => element.addEventListener("click", closeScanner));

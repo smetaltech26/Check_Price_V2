@@ -1,0 +1,10 @@
+{
+  "name": "Check Price V2",
+  "short_name": "Check Price",
+  "description": "ระบบตรวจสอบราคาขายและราคาวัตถุดิบ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06101e",
+  "theme_color": "#07111f",
+  "lang": "th"
+}

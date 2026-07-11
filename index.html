@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="ระบบตรวจสอบราคาขายและราคาวัตถุดิบจาก QR Code">
+  <title>Check Price V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="aurora aurora-one"></div>
+  <div class="aurora aurora-two"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">CP</div>
+      <div>
+        <p class="eyebrow">SMART FACTORY TOOL</p>
+        <h1>Check Price <span>V2</span></h1>
+      </div>
+      <div id="connectionStatus" class="status-pill loading"><i></i><span>กำลังโหลดข้อมูล</span></div>
+    </header>
+
+    <section class="hero glass-card">
+      <div class="hero-copy">
+        <p class="section-tag">PRICE LOOKUP</p>
+        <h2>เช็กราคาได้ทันที<br><span>เพียงสแกน QR Code</span></h2>
+        <p>ค้นหา ITEM พร้อมดูชื่อ Part ราคาขาย และราคาวัตถุดิบจากฐานข้อมูลล่าสุด</p>
+      </div>
+      <button id="scanButton" class="scan-button" type="button">
+        <span class="scan-icon" aria-hidden="true"></span>
+        <span><strong>สแกน QR Code</strong><small>แตะเพื่อเปิดกล้อง</small></span>
+      </button>
+    </section>
+
+    <section class="search-panel glass-card" aria-labelledby="searchTitle">
+      <div class="section-heading">
+        <div><p class="section-tag">MANUAL SEARCH</p><h2 id="searchTitle">ค้นหาข้อมูลสินค้า</h2></div>
+        <button id="refreshButton" class="icon-button" type="button" aria-label="โหลดข้อมูลใหม่" title="โหลดข้อมูลใหม่">↻</button>
+      </div>
+      <form id="searchForm" class="search-form">
+        <label><span>ITEM</span><input id="itemInput" name="item" autocomplete="off" placeholder="เช่น FG-00001"></label>
+        <label><span>NAME PART</span><input id="nameInput" name="name" autocomplete="off" placeholder="กรอกชื่อ Part"></label>
+        <button class="search-button" type="submit"><span aria-hidden="true">⌕</span> ค้นหา</button>
+      </form>
+      <p class="search-hint">กรอกอย่างน้อย 1 ช่อง ระบบรองรับการค้นหาบางส่วนของคำ</p>
+    </section>
+
+    <section id="resultSection" class="result-section" aria-live="polite" hidden>
+      <div class="result-title"><div><p class="section-tag">SEARCH RESULT</p><h2>ผลการค้นหา</h2></div><span id="resultCount"></span></div>
+      <div id="resultGrid" class="result-grid"></div>
+    </section>
+
+    <section id="emptyState" class="empty-state glass-card">
+      <div class="empty-icon" aria-hidden="true">⌁</div>
+      <h2>พร้อมตรวจสอบราคา</h2>
+      <p>สแกน QR Code หรือกรอกข้อมูลสินค้าเพื่อเริ่มค้นหา</p>
+    </section>
+  </main>
+
+  <div id="scannerModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="scannerTitle" hidden>
+    <div class="modal-backdrop" data-close-scanner></div>
+    <div class="scanner-dialog glass-card">
+      <div class="modal-header"><div><p class="section-tag">QR SCANNER</p><h2 id="scannerTitle">สแกน ITEM</h2></div><button class="close-button" type="button" data-close-scanner aria-label="ปิด">×</button></div>
+      <div id="qrReader"></div>
+      <p class="scanner-help">วาง QR Code ให้อยู่ภายในกรอบ กล้องจะอ่านอัตโนมัติ</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
